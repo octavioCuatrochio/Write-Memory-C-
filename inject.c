@@ -51,14 +51,27 @@ void alert(char *text)
 
 int main(int argc, char const *argv[])
 {
-    char *procName = "gta_sa.exe";
+    char procName[] = "notepad.exe";
     DWORD pID = getProcID(procName);
 
     printf("Notepad con id: %lu", pID);
 
-    HANDLE hProcess = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, TRUE, pID);
-    // LPVOID pszLibFileRemote = VirtualAllocEx(hProcess, NULL, )
+    char dll[] = "dllmain.dll";
+    char dllPath[MAX_PATH] = {0};
+    GetFullPathName(dll, MAX_PATH, dllPath, NULL);
 
-    alert("PRuebaaaa");
+    printf("path: %s", dllPath);
+
+    HANDLE hProcess = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, TRUE, pID);
+    LPVOID pszLibFileRemote = VirtualAllocEx(hProcess, NULL, strlen(dllPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+    WriteProcessMemory(hProcess, pszLibFileRemote, dllPath, strlen(dllPath) + 1, NULL);
+    HANDLE handleThread = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)LoadLibraryA, pszLibFileRemote, 0, NULL);
+
+    WaitForSingleObject(handleThread, INFINITE);
+    CloseHandle(handleThread);
+    VirtualFreeEx(hProcess, dllPath, 0, MEM_RELEASE);
+    CloseHandle(hProcess);
+    // alert("PRuebaaaa");
     return 0;
 }

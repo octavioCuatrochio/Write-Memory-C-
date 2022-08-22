@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <stdbool.h>
 
 DWORD WINAPI MainThread(LPVOID param)
 {
