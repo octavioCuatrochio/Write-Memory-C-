@@ -1,11 +1,9 @@
 #include <windows.h>
 #include <stdio.h>
-#include <tchar.h>
-#include <psapi.h>
+// #include <tchar.h>
+// #include <psapi.h>
 #include <Windows.h>
-#include <ntstatus.h>
 #include <tlhelp32.h>
-#include <memoryapi.h>
 
 DWORD getProcID(char *procName)
 {
@@ -51,7 +49,7 @@ void alert(char *text)
 
 int main(int argc, char const *argv[])
 {
-    char procName[] = "notepad.exe";
+    char procName[] = "BurnoutParadise.exe";
     DWORD pID = getProcID(procName);
 
     printf("Notepad con id: %lu", pID);
@@ -60,7 +58,7 @@ int main(int argc, char const *argv[])
     char dllPath[MAX_PATH] = {0};
     GetFullPathName(dll, MAX_PATH, dllPath, NULL);
 
-    printf("path: %s", dllPath);
+    printf("path: %s ", dllPath);
 
     HANDLE hProcess = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, TRUE, pID);
     LPVOID pszLibFileRemote = VirtualAllocEx(hProcess, NULL, strlen(dllPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
@@ -72,6 +70,6 @@ int main(int argc, char const *argv[])
     CloseHandle(handleThread);
     VirtualFreeEx(hProcess, dllPath, 0, MEM_RELEASE);
     CloseHandle(hProcess);
-    // alert("PRuebaaaa");
+
     return 0;
 }

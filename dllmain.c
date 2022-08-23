@@ -9,6 +9,7 @@ DWORD WINAPI MainThread(LPVOID param)
         {
             MessageBoxA(NULL, "F6 pressed!", "F6 pressed!", MB_OK);
         }
+        Sleep(100);
     }
     return 0;
 }
