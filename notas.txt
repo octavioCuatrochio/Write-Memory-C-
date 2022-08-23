@@ -1,0 +1,12 @@
+Song window function?
+00570ea0
+
+guardar Song Name (por acá es)
+005662f7
+songName value => ECX
+EAX = array con info?
+
+Song Name
+00a78d34
+
+

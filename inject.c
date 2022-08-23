@@ -49,7 +49,7 @@ void alert(char *text)
 
 int main(int argc, char const *argv[])
 {
-    char procName[] = "BurnoutParadise.exe";
+    char procName[] = "notepad.exe";
     DWORD pID = getProcID(procName);
 
     printf("Notepad con id: %lu", pID);
